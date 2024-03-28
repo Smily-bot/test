@@ -1,45 +1,18 @@
 <html>
 <canvas id="game" width="800" height="600"></canvas>
 <script>
-var spritesheet = new Image();
-spritesheet.onload=function(){
-
-    // specify desired x,y,width,height
-    // to be clipped from the spritesheet
-    var x=0; 
-    var y=325;
-    var w=137;
-    var h=157;
-
-    // create an in-memory canvas
-    var canvas=document.createElement('canvas');
-    var ctx=canvas.getContext('2d');
-
-    // size the canvas to the desired sub-sprite size
-    canvas.width=w;
-    canvas.height=h;
-
-    // clip the sub-sprite from x,y,w,h on the spritesheet image
-    // and draw the clipped sub-sprite on the canvas at 0,0
-    ctx.drawImage(spritesheet,  x,y,w,h,  0,0,w,y);
-
-    // convert the canvas to an image
-    var subsprite=new Image();
-    subsprite.onload=function(){ doCallback(subsprite); };
-	subsprite.crossOrigin="anonymous"
-    subsprite.src=canvas.toDataURL("image/png");    
-
+var request = new XMLHttpRequest();
+request.open("GET", "demo.xml", false);
+request.send();
+var xml = request.responseXML;
+var users = xml.getElementsByTagName("user");
+for(var i = 0; i < users.length; i++) {
+    var user = users[i];
+    var names = user.getElementsByTagName("name");
+    for(var j = 0; j < names.length; j++) {
+        alert(names[j].childNodes[0].nodeValue);
+    }
 }
-spritesheet.src ="player.png";
-function doCallback(img){
-var cnvs = document.getElementById("game");
-var tx = cnvs.getContext("2d");
-
-tx.fillStyle = "#696";
-tx.fillRect(0, 0, cnvs.width, cnvs.height);
-tx.drawImage(img, 0, 0);
-}
-
 </script>
 
 </html>
